@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 
-const API_URL = 'https://your-backend-url.up.railway.app'; // Replace with your backend URL
+const API_URL = 'https://expense-tracker-backend-production-15c2.up.railway.app/'; // Replace with your backend URL
 
 export default function App() {
   const [transactions, setTransactions] = useState([]);
