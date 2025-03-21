@@ -1,16 +1,17 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import DatePicker from 'react-datepicker';
-import 'react-datepicker/dist/react-datepicker.css';
 
-const API_URL = 'https://your-backend-url.up.railway.app'; // Replace with your backend
+const API_URL = 'https://your-backend-url.up.railway.app'; // Replace with your backend URL
 
 export default function App() {
   const [transactions, setTransactions] = useState([]);
   const [amount, setAmount] = useState('');
   const [type, setType] = useState('income');
   const [owner, setOwner] = useState('');
-  const [date, setDate] = useState(new Date());
+  const [date, setDate] = useState(() => {
+    const today = new Date();
+    return today.toISOString().split('T')[0]; // default to today in YYYY-MM-DD
+  });
 
   const fetchTransactions = async () => {
     const res = await axios.get(`${API_URL}/transactions`);
@@ -23,11 +24,11 @@ export default function App() {
       amount: parseFloat(amount),
       type,
       owner,
-      date: date.toISOString().split('T')[0], // format YYYY-MM-DD
+      date, // already in YYYY-MM-DD format
     });
     setAmount('');
     setOwner('');
-    setDate(new Date());
+    setDate(new Date().toISOString().split('T')[0]);
     fetchTransactions();
   };
 
@@ -55,7 +56,11 @@ export default function App() {
           value={owner}
           onChange={e => setOwner(e.target.value)}
         />
-        <DatePicker selected={date} onChange={setDate} />
+        <input
+          type="date"
+          value={date}
+          onChange={e => setDate(e.target.value)}
+        />
         <button onClick={addTransaction}>Add</button>
       </div>
 
